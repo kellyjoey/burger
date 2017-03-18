@@ -9,16 +9,17 @@ var burger = require("../models/burger.js");
 router.get("/", function(req, res) {
   burger.selectAll(function(data) {
     var hbsObject = {
-      cats: data
+      burgers: data,
     };
-    console.log(hbsObject);
+    console.log("handlebars object: " + hbsObject);
     res.render("index", hbsObject);
   });
 });
 
 router.post("/", function(req, res) {
-  cat.insertOne([
-    "name"
+	// console.log(req.body.name);
+  burger.insertOne([
+    "burger_name"
   ], [
     req.body.name
   ], function() {
@@ -31,7 +32,7 @@ router.put("/:id", function(req, res) {
 
   console.log("condition", condition);
 
-  burger.update({
+  burger.updateOne({
     devoured: req.body.devoured
   }, condition, function() {
     res.redirect("/");

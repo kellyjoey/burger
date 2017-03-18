@@ -6,24 +6,44 @@ var connection = require("../config/connection.js");
 // insertOne()
 // updateOne()
 
-// Object for all our SQL statement functions.
-// The last variable cb represents the anonymous function being passed from server.js
-var orm = {
-	selectAll: function(cb) {
-    	var queryString = "SELECT * FROM burgers";
-    	connection.query(queryString, function(err, result) {
-      		if (err) {
-        	throw err;
-      		}
-      	cb(result);
-    	});
-  	},
-  	insertOne: function(vals, cb) {
-    	var queryString = "INSERT INTO burgers (burger_name)";
+// Helper function for SQL syntax.
+function objToSql(ob) {
+  var arr = [];
 
-    	queryString += "VALUES (";
-    	queryString += vals;
-    	queryString += ") ";
+  for (var key in ob) {
+    if (Object.hasOwnProperty.call(ob, key)) {
+      arr.push(key + "=" + ob[key]);
+    }
+  }
+
+  return arr.toString();
+}
+
+var tableName = "burgers"
+
+// Object for all our SQL statement functions.
+var orm = {
+	 // Here our ORM is creating a simple method for performing a query of the entire table.
+  // We make use of the callback to ensure that data is returned only once the query is done.
+  selectAll: function(callback) {
+    // console.log("selectAll function from orm.js" + callback);
+    var s = "SELECT * FROM " + tableName;
+
+    connection.query(s, function(err, result) {
+
+      callback(result);
+
+    });
+  },
+  	insertOne: function(table, cols, vals, callback) {
+    	var queryString = "INSERT INTO " + table;
+
+    	queryString += " (";
+      queryString += cols;
+      queryString += ") ";
+      queryString += "VALUES (?)";
+    	// queryString += vals;
+    	// queryString += ") ";
 
     	console.log(queryString);
 
@@ -31,14 +51,16 @@ var orm = {
       		if (err) {
         	throw err;
       		}
-      	cb(result);
+      	callback(result);
     	});
   	},
-  	 // An example of objColVals would be {name: panther, sleepy: true}
-  	updateOne: function(condition, cb) {
-    	var queryString = "UPDATE burgers";
+    
+  	updateOne: function(table, objColVals, condition, callback) {
+    	var queryString = "UPDATE " + table;
 
-    	queryString += " SET true WHERE";
+    	queryString += " SET ";
+      queryString += objToSql(objColVals);
+      queryString += " WHERE ";
     	queryString += condition;
 
     	console.log(queryString);
@@ -47,7 +69,7 @@ var orm = {
         	throw err;
       	}
 
-      	cb(result);
+      	callback(result);
     	});
   	}
 }

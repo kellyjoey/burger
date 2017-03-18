@@ -1,0 +1,36 @@
+body {
+  background: url("../images/burger.png");
+}
+
+.jumbotron {
+	text-align: center;
+	margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+h1, h2{
+	color: white;
+}
+
+li {
+  padding: 5px;
+  margin: 5px;
+  background-color: orange;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.create-update-form {
+  padding: 5px;
+  margin: 5px;
+  background: aqua;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
