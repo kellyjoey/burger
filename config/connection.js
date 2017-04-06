@@ -23,7 +23,7 @@ connection.connect(function(err) {
     return;
   }
   console.log("connected as id " + connection.threadId);
-  console.log(process.env.JAWSDB_URL);
+  
 });
 
 // Export connection for our ORM to use.
